@@ -1,6 +1,6 @@
-import React, { Suspense, lazy, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { authStore, useAuth } from '@acme/auth';
+import { lazy, Suspense, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import styles from './App.module.css';
 
 const PolicyApp = lazy(() => import('policy/App'));
@@ -35,6 +35,7 @@ export default function App() {
           {TABS.map((tab) => (
             <button
               key={tab}
+              type="button"
               className={activeTab === tab ? styles.activeTab : styles.tab}
               onClick={() => setActiveTab(tab)}
             >
@@ -43,16 +44,17 @@ export default function App() {
           ))}
         </nav>
         <div className={styles.authBar}>
-          {auth.isAuthenticated && (
-            <span className={styles.userInfo}>{auth.user?.name}</span>
-          )}
-          <button className={styles.authBtn} onClick={toggleAuth}>
+          {auth.isAuthenticated && <span className={styles.userInfo}>{auth.user?.name}</span>}
+          <button type="button" className={styles.authBtn} onClick={toggleAuth}>
             {auth.isAuthenticated ? 'Sign Out' : 'Sign In'}
           </button>
         </div>
       </header>
       <main className={styles.main}>
-        <ErrorBoundary key={activeTab} fallback={<p className={styles.error}>Failed to load module.</p>}>
+        <ErrorBoundary
+          key={activeTab}
+          fallback={<p className={styles.error}>Failed to load module.</p>}
+        >
           <Suspense fallback={<p className={styles.loading}>Loading…</p>}>
             {activeTab === 'policy' && <PolicyApp />}
             {activeTab === 'claims' && <ClaimsApp />}

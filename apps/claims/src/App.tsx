@@ -1,10 +1,22 @@
-import { useState } from 'react';
 import { useAuth } from '@acme/auth';
+import { useState } from 'react';
 import styles from './App.module.css';
 
 const claims = [
-  { id: 'C-101', policy: 'Home Insurance', date: '2025-01-15', amount: '$4,200', status: 'Approved' },
-  { id: 'C-102', policy: 'Auto Insurance', date: '2025-02-03', amount: '$1,800', status: 'In Review' },
+  {
+    id: 'C-101',
+    policy: 'Home Insurance',
+    date: '2025-01-15',
+    amount: '$4,200',
+    status: 'Approved',
+  },
+  {
+    id: 'C-102',
+    policy: 'Auto Insurance',
+    date: '2025-02-03',
+    amount: '$1,800',
+    status: 'In Review',
+  },
   { id: 'C-103', policy: 'Home Insurance', date: '2025-03-10', amount: '$650', status: 'Pending' },
 ];
 

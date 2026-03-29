@@ -5,9 +5,13 @@
   "scripts": {
     "dev": "pnpm --parallel -r dev",
     "build": "pnpm -r build",
-    "preview": "pnpm --parallel -r preview"
+    "preview": "pnpm --parallel -r preview",
+    "lint": "biome lint --write .",
+    "format": "biome format --write .",
+    "check": "biome check --write ."
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.9",
     "typescript": "^5.7.0"
   }
 }
