@@ -14,6 +14,9 @@ importers:
 
   apps/claims:
     dependencies:
+      '@acme/auth':
+        specifier: workspace:*
+        version: link:../../libs/auth
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -42,6 +45,9 @@ importers:
 
   apps/coverage:
     dependencies:
+      '@acme/auth':
+        specifier: workspace:*
+        version: link:../../libs/auth
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -70,6 +76,9 @@ importers:
 
   apps/policy:
     dependencies:
+      '@acme/auth':
+        specifier: workspace:*
+        version: link:../../libs/auth
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -98,6 +107,9 @@ importers:
 
   apps/shell:
     dependencies:
+      '@acme/auth':
+        specifier: workspace:*
+        version: link:../../libs/auth
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -126,6 +138,18 @@ importers:
       typescript:
         specifier: ^5.7.0
         version: 5.9.3
+
+  libs/auth:
+    dependencies:
+      '@nanostores/react':
+        specifier: ^0.8.0
+        version: 0.8.4(nanostores@0.11.4)(react@19.2.4)
+      nanostores:
+        specifier: ^0.11.3
+        version: 0.11.4
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
 
 packages:
 
@@ -264,6 +288,13 @@ packages:
 
   '@module-federation/webpack-bundler-runtime@2.3.0':
     resolution: {integrity: sha512-tcD5kM15N3B8CuCVngdeBS76fY3hE64bgp+kW2zvsGf4edTHuKU73BKIBuGfhbeYxM6UpsoK1PGVJ3Pb7vEfAA==}
+
+  '@nanostores/react@0.8.4':
+    resolution: {integrity: sha512-EciHSzDXg7GmGODjegGG1VldPEinbAK+12/Uz5+MAdHmxf082Rl6eXqKFxAAu4pZAcr5dNTpv6wMfEe7XacjkQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      nanostores: ^0.9.0 || ^0.10.0 || ^0.11.0
+      react: '>=18.0.0'
 
   '@napi-rs/wasm-runtime@1.0.7':
     resolution: {integrity: sha512-SeDnOO0Tk7Okiq6DbXmmBODgOAb9dp9gjlphokTUxmt8U3liIP1ZsozBahH69j/RJv+Rfs6IwUKHTgQYJ/HBAw==}
@@ -630,6 +661,10 @@ packages:
   mime-types@2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
+
+  nanostores@0.11.4:
+    resolution: {integrity: sha512-k1oiVNN4hDK8NcNERSZLQiMfRzEGtfnvZvdBvey3SQbgn8Dcrk0h1I6vpxApjb10PFUflZrgJ2WEZyJQ+5v7YQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
 
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
@@ -1018,6 +1053,11 @@ snapshots:
     transitivePeerDependencies:
       - node-fetch
 
+  '@nanostores/react@0.8.4(nanostores@0.11.4)(react@19.2.4)':
+    dependencies:
+      nanostores: 0.11.4
+      react: 19.2.4
+
   '@napi-rs/wasm-runtime@1.0.7':
     dependencies:
       '@emnapi/core': 1.9.1
@@ -1361,6 +1401,8 @@ snapshots:
   mime-types@2.1.35:
     dependencies:
       mime-db: 1.52.0
+
+  nanostores@0.11.4: {}
 
   node-fetch@2.7.0(encoding@0.1.13):
     dependencies:

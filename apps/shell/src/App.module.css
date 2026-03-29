@@ -50,6 +50,31 @@
   flex: 1;
 }
 
+.authBar {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.userInfo {
+  font-size: 0.8125rem;
+  color: #555;
+}
+
+.authBtn {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8125rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+.authBtn:hover {
+  background: #f5f5f5;
+}
+
 .loading {
   color: #888;
   font-size: 0.875rem;

@@ -1,0 +1,13 @@
+{
+  "name": "@acme/auth",
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@nanostores/react": "^0.8.0",
+    "nanostores": "^0.11.3"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  }
+}

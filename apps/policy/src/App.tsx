@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useAuth } from '@acme/auth';
 import styles from './App.module.css';
 
 const policies = [
@@ -9,10 +10,14 @@ const policies = [
 
 export default function App() {
   const [selected, setSelected] = useState<string | null>(null);
+  const auth = useAuth();
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Policies</h2>
+      <p className={styles.authStatus}>
+        {auth.isAuthenticated ? `Signed in as ${auth.user?.name}` : 'Not signed in'}
+      </p>
       <table className={styles.table}>
         <thead>
           <tr>

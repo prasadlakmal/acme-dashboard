@@ -8,6 +8,7 @@
     "preview": "rsbuild preview"
   },
   "dependencies": {
+    "@acme/auth": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
