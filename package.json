@@ -1,0 +1,13 @@
+{
+  "name": "acme-dashboard",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "pnpm --parallel -r dev",
+    "build": "pnpm -r build",
+    "preview": "pnpm --parallel -r preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

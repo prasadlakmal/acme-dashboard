@@ -1,0 +1,7 @@
+node_modules
+dist
+.rsbuild
+@mf-types
+.mf
+*.local
+.claude/settings.local.json
