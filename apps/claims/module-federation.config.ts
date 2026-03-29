@@ -5,9 +5,8 @@ export default createModuleFederationConfig({
   exposes: {
     './App': './src/App',
   },
-  shareStrategy: 'loaded-first',
   shared: {
-    react: { singleton: true },
-    'react-dom': { singleton: true },
+    react: { singleton: true, eager: true },
+    'react-dom': { singleton: true, eager: true },
   },
 });

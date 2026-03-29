@@ -7,9 +7,8 @@ export default createModuleFederationConfig({
     claims: 'claims@http://localhost:3002/mf-manifest.json',
     coverage: 'coverage@http://localhost:3003/mf-manifest.json',
   },
-  shareStrategy: 'loaded-first',
   shared: {
-    react: { singleton: true },
-    'react-dom': { singleton: true },
+    react: { singleton: true, eager: true },
+    'react-dom': { singleton: true, eager: true },
   },
 });
