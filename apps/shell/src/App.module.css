@@ -54,3 +54,8 @@
   color: #888;
   font-size: 0.875rem;
 }
+
+.error {
+  color: #b91c1c;
+  font-size: 0.875rem;
+}

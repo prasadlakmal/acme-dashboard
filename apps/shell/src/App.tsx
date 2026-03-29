@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import styles from './App.module.css';
 
 const PolicyApp = lazy(() => import('policy/App'));
@@ -29,11 +30,13 @@ export default function App() {
         </nav>
       </header>
       <main className={styles.main}>
-        <Suspense fallback={<p className={styles.loading}>Loading…</p>}>
-          {activeTab === 'policy' && <PolicyApp />}
-          {activeTab === 'claims' && <ClaimsApp />}
-          {activeTab === 'coverage' && <CoverageApp />}
-        </Suspense>
+        <ErrorBoundary key={activeTab} fallback={<p className={styles.error}>Failed to load module.</p>}>
+          <Suspense fallback={<p className={styles.loading}>Loading…</p>}>
+            {activeTab === 'policy' && <PolicyApp />}
+            {activeTab === 'claims' && <ClaimsApp />}
+            {activeTab === 'coverage' && <CoverageApp />}
+          </Suspense>
+        </ErrorBoundary>
       </main>
     </div>
   );
