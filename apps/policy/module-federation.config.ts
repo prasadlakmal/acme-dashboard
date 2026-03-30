@@ -9,5 +9,6 @@ export default createModuleFederationConfig({
     react: { singleton: true, eager: true },
     'react-dom': { singleton: true, eager: true },
     '@acme/auth': { singleton: true, eager: true },
+    '@acme/ui-kit': { singleton: true, eager: true },
   },
 });

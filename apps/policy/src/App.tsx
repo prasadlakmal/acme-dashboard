@@ -1,51 +1,46 @@
 import { useAuth } from '@acme/auth';
+import type { Column } from '@acme/ui-kit';
+import { PageLayout, StatusBadge, Table } from '@acme/ui-kit';
 import { useState } from 'react';
-import styles from './App.module.css';
 
-const policies = [
+interface Policy {
+  id: string;
+  name: string;
+  status: string;
+  premium: string;
+}
+
+const policies: Policy[] = [
   { id: 'P-001', name: 'Home Insurance', status: 'Active', premium: '$120/mo' },
   { id: 'P-002', name: 'Auto Insurance', status: 'Active', premium: '$85/mo' },
   { id: 'P-003', name: 'Life Insurance', status: 'Pending', premium: '$200/mo' },
 ];
 
+const columns: Column<Policy>[] = [
+  { key: 'id', header: 'ID' },
+  { key: 'name', header: 'Name' },
+  {
+    key: 'status',
+    header: 'Status',
+    render: (p: Policy) => <StatusBadge status={p.status} />,
+  },
+  { key: 'premium', header: 'Premium' },
+];
+
 export default function App() {
   const [selected, setSelected] = useState<string | null>(null);
   const auth = useAuth();
+  const subtitle = auth.isAuthenticated ? `Signed in as ${auth.user?.name}` : 'Not signed in';
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>Policies</h2>
-      <p className={styles.authStatus}>
-        {auth.isAuthenticated ? `Signed in as ${auth.user?.name}` : 'Not signed in'}
-      </p>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Premium</th>
-          </tr>
-        </thead>
-        <tbody>
-          {policies.map((p) => (
-            <tr
-              key={p.id}
-              className={selected === p.id ? styles.selectedRow : styles.row}
-              onClick={() => setSelected(p.id)}
-            >
-              <td>{p.id}</td>
-              <td>{p.name}</td>
-              <td>
-                <span className={p.status === 'Active' ? styles.active : styles.pending}>
-                  {p.status}
-                </span>
-              </td>
-              <td>{p.premium}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <PageLayout title="Policies" subtitle={subtitle}>
+      <Table
+        rows={policies}
+        columns={columns}
+        getRowKey={(p: Policy) => p.id}
+        selectedKey={selected}
+        onRowClick={(p: Policy) => setSelected(p.id)}
+      />
+    </PageLayout>
   );
 }

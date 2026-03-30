@@ -1,4 +1,5 @@
 import { authStore, useAuth } from '@acme/auth';
+import { Button } from '@acme/ui-kit';
 import { lazy, Suspense, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import styles from './App.module.css';
@@ -33,21 +34,20 @@ export default function App() {
         <span className={styles.logo}>Acme Dashboard</span>
         <nav className={styles.nav}>
           {TABS.map((tab) => (
-            <button
+            <Button
               key={tab}
-              type="button"
-              className={activeTab === tab ? styles.activeTab : styles.tab}
+              variant={activeTab === tab ? 'primary' : 'ghost'}
               onClick={() => setActiveTab(tab)}
             >
               {tab[0].toUpperCase() + tab.slice(1)}
-            </button>
+            </Button>
           ))}
         </nav>
         <div className={styles.authBar}>
           {auth.isAuthenticated && <span className={styles.userInfo}>{auth.user?.name}</span>}
-          <button type="button" className={styles.authBtn} onClick={toggleAuth}>
+          <Button variant="secondary" onClick={toggleAuth}>
             {auth.isAuthenticated ? 'Sign Out' : 'Sign In'}
-          </button>
+          </Button>
         </div>
       </header>
       <main className={styles.main}>

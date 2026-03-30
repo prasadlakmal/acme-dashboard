@@ -1,7 +1,15 @@
 import { useAuth } from '@acme/auth';
-import styles from './App.module.css';
+import type { Column } from '@acme/ui-kit';
+import { PageLayout, StatusBadge, Table } from '@acme/ui-kit';
 
-const coverages = [
+interface CoverageRow {
+  name: string;
+  limit: string;
+  deductible: string;
+  covered: boolean;
+}
+
+const coverages: CoverageRow[] = [
   { name: 'Dwelling', limit: '$350,000', deductible: '$1,000', covered: true },
   { name: 'Personal Property', limit: '$75,000', deductible: '$500', covered: true },
   { name: 'Liability', limit: '$100,000', deductible: '$0', covered: true },
@@ -9,39 +17,24 @@ const coverages = [
   { name: 'Earthquake', limit: '—', deductible: '—', covered: false },
 ];
 
+const columns: Column<CoverageRow>[] = [
+  { key: 'name', header: 'Coverage Type' },
+  { key: 'limit', header: 'Limit' },
+  { key: 'deductible', header: 'Deductible' },
+  {
+    key: 'covered',
+    header: 'Included',
+    render: (c: CoverageRow) => <StatusBadge status={c.covered ? 'Yes' : 'No'} />,
+  },
+];
+
 export default function App() {
   const auth = useAuth();
+  const subtitle = auth.isAuthenticated ? `Signed in as ${auth.user?.name}` : 'Not signed in';
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>Coverage</h2>
-      <p className={styles.authStatus}>
-        {auth.isAuthenticated ? `Signed in as ${auth.user?.name}` : 'Not signed in'}
-      </p>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Coverage Type</th>
-            <th>Limit</th>
-            <th>Deductible</th>
-            <th>Included</th>
-          </tr>
-        </thead>
-        <tbody>
-          {coverages.map((c) => (
-            <tr key={c.name} className={styles.row}>
-              <td>{c.name}</td>
-              <td>{c.limit}</td>
-              <td>{c.deductible}</td>
-              <td>
-                <span className={c.covered ? styles.yes : styles.no}>
-                  {c.covered ? 'Yes' : 'No'}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <PageLayout title="Coverage" subtitle={subtitle}>
+      <Table rows={coverages} columns={columns} getRowKey={(c: CoverageRow) => c.name} />
+    </PageLayout>
   );
 }

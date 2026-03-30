@@ -1,0 +1,20 @@
+.badge {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.active {
+  color: var(--color-status-active);
+}
+
+.pending {
+  color: var(--color-status-pending);
+}
+
+.review {
+  color: var(--color-status-review);
+}
+
+.no {
+  color: var(--color-text-disabled);
+}
