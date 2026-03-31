@@ -41,6 +41,31 @@
   color: var(--color-text-muted);
 }
 
+.navLink {
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  transition: background 0.15s, color 0.15s;
+}
+
+.navLink:hover {
+  background: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+}
+
+.navLinkActive {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+.navLinkActive:hover {
+  background: var(--color-brand);
+  color: #fff;
+}
+
 .loading {
   color: var(--color-text-subtle);
   font-size: var(--font-size-sm);

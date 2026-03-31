@@ -11,7 +11,8 @@
     "@acme/auth": "workspace:*",
     "@acme/ui-kit": "workspace:*",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "react-router": "catalog:"
   },
   "devDependencies": {
     "@module-federation/rsbuild-plugin": "catalog:",
