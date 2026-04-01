@@ -1,0 +1,181 @@
+# Deploy — runs on every push to main
+#
+# KEY DEMO CONCEPT: Independent deployability
+#   - Each MFE (claims, coverage, policy) deploys independently based on what changed.
+#   - Changing only apps/claims/** redeploys claims but NOT shell, policy, or coverage.
+#   - Changing libs/** triggers all apps because they depend on shared libraries.
+#   - Shell always deploys last so it picks up any updated remote manifests.
+#
+# Required GitHub secrets:
+#   NETLIFY_AUTH_TOKEN       — one Netlify personal access token
+#   NETLIFY_SITE_ID_SHELL    — Netlify site ID for the shell app
+#   NETLIFY_SITE_ID_POLICY   — Netlify site ID for the policy MFE
+#   NETLIFY_SITE_ID_CLAIMS   — Netlify site ID for the claims MFE
+#   NETLIFY_SITE_ID_COVERAGE — Netlify site ID for the coverage MFE
+#
+# To swap hosting provider: replace the "Deploy to Netlify" steps with your
+# provider's CLI (e.g. aws s3 sync dist/ s3://bucket, vercel deploy --prod, etc.)
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  # ─── Step 1: Detect which apps need deployment ──────────────────────────────
+  # Uses path filters so each MFE job only runs when its own code (or shared
+  # libs) changed. This is what makes independent deployability visible.
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      shell: ${{ steps.filter.outputs.shell }}
+      policy: ${{ steps.filter.outputs.policy }}
+      claims: ${{ steps.filter.outputs.claims }}
+      coverage: ${{ steps.filter.outputs.coverage }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            shell:
+              - 'apps/shell/**'
+              - 'libs/**'
+            policy:
+              - 'apps/policy/**'
+              - 'libs/**'
+            claims:
+              - 'apps/claims/**'
+              - 'libs/**'
+            coverage:
+              - 'apps/coverage/**'
+              - 'libs/**'
+
+  # ─── Step 2: Deploy each remote MFE independently ───────────────────────────
+  # Each job is conditional on the `changes` output above.
+  # `turbo build --filter=<app>` builds only the app + its lib dependencies.
+
+  deploy-policy:
+    name: Deploy policy
+    needs: changes
+    if: needs.changes.outputs.policy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+      - run: pnpm install --frozen-lockfile
+      - name: Build policy
+        run: pnpm turbo build --filter=policy --cache-dir=.turbo
+      - name: Deploy to Netlify
+        run: npx netlify-cli deploy --prod --dir=apps/policy/dist --message="policy@${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_POLICY }}
+
+  deploy-claims:
+    name: Deploy claims
+    needs: changes
+    if: needs.changes.outputs.claims == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+      - run: pnpm install --frozen-lockfile
+      - name: Build claims
+        run: pnpm turbo build --filter=claims --cache-dir=.turbo
+      - name: Deploy to Netlify
+        run: npx netlify-cli deploy --prod --dir=apps/claims/dist --message="claims@${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_CLAIMS }}
+
+  deploy-coverage:
+    name: Deploy coverage
+    needs: changes
+    if: needs.changes.outputs.coverage == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+      - run: pnpm install --frozen-lockfile
+      - name: Build coverage
+        run: pnpm turbo build --filter=coverage --cache-dir=.turbo
+      - name: Deploy to Netlify
+        run: npx netlify-cli deploy --prod --dir=apps/coverage/dist --message="coverage@${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_COVERAGE }}
+
+  # ─── Step 3: Deploy shell last ───────────────────────────────────────────────
+  # Shell always waits for all remotes to finish (needs: [...remotes]).
+  # This guarantees the shell's mf-manifest.json references are already live
+  # before the host app itself updates.
+  #
+  # Note: `always()` ensures this job runs even if some remote jobs were skipped
+  # (i.e., those remotes had no changes). It only skips if there's a failure.
+  deploy-shell:
+    name: Deploy shell
+    needs: [changes, deploy-policy, deploy-claims, deploy-coverage]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      needs.changes.outputs.shell == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+      - run: pnpm install --frozen-lockfile
+      - name: Build shell
+        run: pnpm turbo build --filter=shell --cache-dir=.turbo
+      - name: Deploy to Netlify
+        run: npx netlify-cli deploy --prod --dir=apps/shell/dist --message="shell@${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_SHELL }}
