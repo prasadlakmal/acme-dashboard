@@ -81,7 +81,7 @@ jobs:
       - name: Build policy
         run: pnpm turbo build --filter=@acme/policy --cache-dir=.turbo
       - name: Deploy to Netlify
-        run: pnpm dlx netlify-cli deploy --prod --dir=apps/policy/dist --site=$NETLIFY_SITE_ID --message="policy@${{ github.sha }}"
+        run: pnpm --package=netlify-cli dlx netlify deploy --prod --dir=apps/policy/dist --site=$NETLIFY_SITE_ID --message="policy@${{ github.sha }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_POLICY }}
@@ -109,7 +109,7 @@ jobs:
       - name: Build claims
         run: pnpm turbo build --filter=@acme/claims --cache-dir=.turbo
       - name: Deploy to Netlify
-        run: pnpm dlx netlify-cli deploy --prod --dir=apps/claims/dist --site=$NETLIFY_SITE_ID --message="claims@${{ github.sha }}"
+        run: pnpm --package=netlify-cli dlx netlify deploy --prod --dir=apps/claims/dist --site=$NETLIFY_SITE_ID --message="claims@${{ github.sha }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_CLAIMS }}
@@ -137,7 +137,7 @@ jobs:
       - name: Build coverage
         run: pnpm turbo build --filter=@acme/coverage --cache-dir=.turbo
       - name: Deploy to Netlify
-        run: pnpm dlx netlify-cli deploy --prod --dir=apps/coverage/dist --site=$NETLIFY_SITE_ID --message="coverage@${{ github.sha }}"
+        run: pnpm --package=netlify-cli dlx netlify deploy --prod --dir=apps/coverage/dist --site=$NETLIFY_SITE_ID --message="coverage@${{ github.sha }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_COVERAGE }}
@@ -175,7 +175,7 @@ jobs:
       - name: Build shell
         run: pnpm turbo build --filter=@acme/shell --cache-dir=.turbo
       - name: Deploy to Netlify
-        run: pnpm dlx netlify-cli deploy --prod --dir=apps/shell/dist --site=$NETLIFY_SITE_ID --message="shell@${{ github.sha }}"
+        run: pnpm --package=netlify-cli dlx netlify deploy --prod --dir=apps/shell/dist --site=$NETLIFY_SITE_ID --message="shell@${{ github.sha }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_SHELL }}
