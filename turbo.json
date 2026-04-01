@@ -3,7 +3,15 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "*.ts", "*.json", "!dist/**", "!.mf/**", "!@mf-types/**", "!.rsbuild/**"],
+      "inputs": [
+        "src/**",
+        "*.ts",
+        "*.json",
+        "!dist/**",
+        "!.mf/**",
+        "!@mf-types/**",
+        "!.rsbuild/**"
+      ],
       "outputs": ["dist/**"]
     },
     "dev": {
