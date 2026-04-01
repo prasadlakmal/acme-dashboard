@@ -8,4 +8,7 @@ export default defineConfig({
   server: {
     port: 3003,
   },
+  output: {
+    assetPrefix: 'http://localhost:3003',
+  },
 });

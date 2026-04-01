@@ -2,16 +2,18 @@
   "name": "acme-dashboard",
   "private": true,
   "version": "0.0.1",
+  "packageManager": "pnpm@10.32.1",
   "scripts": {
-    "dev": "pnpm --parallel -r dev",
-    "build": "pnpm -r build",
-    "preview": "pnpm --parallel -r preview",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "preview": "turbo preview",
     "lint": "biome lint --write .",
     "format": "biome format --write .",
     "check": "biome check --write ."
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.9",
+    "turbo": "^2.9.3",
     "typescript": "catalog:"
   }
 }

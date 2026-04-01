@@ -5,3 +5,4 @@ dist
 .mf
 *.local
 .claude/settings.local.json
+.turbo
