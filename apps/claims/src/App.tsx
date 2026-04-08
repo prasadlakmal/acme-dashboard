@@ -78,14 +78,14 @@ function ClaimDetail() {
   if (!claim) {
     return (
       <PageLayout title="Claim Not Found" subtitle={subtitle}>
-        <Button variant="ghost" onClick={() => navigate(-1)}>← Back to Claims</Button>
+        <Button variant="ghost" onClick={() => navigate('/claims')}>← Back to Claims</Button>
       </PageLayout>
     );
   }
 
   return (
     <PageLayout title={`Claim ${claim.id}`} subtitle={subtitle}>
-      <Button variant="ghost" onClick={() => navigate(-1)}>← Back to Claims</Button>
+      <Button variant="ghost" onClick={() => navigate('/claims')}>← Back to Claims</Button>
       <dl style={{ marginTop: '1.5rem', display: 'grid', gridTemplateColumns: 'max-content 1fr', gap: '0.5rem 2rem' }}>
         <dt>Policy</dt><dd>{claim.policy}</dd>
         <dt>Date</dt><dd>{claim.date}</dd>
