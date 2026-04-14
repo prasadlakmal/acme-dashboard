@@ -12,7 +12,8 @@
     "@acme/ui-kit": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-error-boundary": "^6.1.1"
+    "react-error-boundary": "^6.1.1",
+    "react-router": "catalog:"
   },
   "devDependencies": {
     "@module-federation/rsbuild-plugin": "catalog:",
